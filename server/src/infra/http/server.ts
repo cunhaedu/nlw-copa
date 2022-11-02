@@ -1,8 +1,12 @@
-import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import Fastify from 'fastify';
 
-import { PrismaPoolRepository } from '../../modules/pools/infra/prisma/repositories/PrismaPoolRepository';
-import { CountPools } from '../../modules/pools/useCases/CountPools/CountPools';
+import 'reflect-metadata';
+
+import '../container';
+
+import { poolRoutes } from '../../modules/pools/infra/http/routes/pool.routes';
+import { poolSchemas } from '../../modules/pools/schemas/create-pool.schema';
 
 async function bootstrap() {
   const fastify = Fastify({
@@ -13,15 +17,11 @@ async function bootstrap() {
     origin: true,
   });
 
+  for (const schema of [...poolSchemas]) {
+    fastify.addSchema(schema);
+  }
 
-  fastify.get('/pools/count', async () => {
-    const poolRepository = new PrismaPoolRepository()
-    const countPoolService = new CountPools(poolRepository);
-
-    const { count } = await countPoolService.execute();
-
-    return { count }
-  })
+  fastify.register(poolRoutes, { prefix: "pools" });
 
   await fastify.listen({ port: 3333, host: '0.0.0.0' });
 }
