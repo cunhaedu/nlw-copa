@@ -18,6 +18,45 @@ export class PrismaPoolRepository implements PoolRepository {
     return this.repository.count();
   }
 
+  async findUserPools(userId: string): Promise<PoolDTO[]> {
+    return this.repository.findMany({
+      where: {
+        participants: {
+          some: {
+            userId,
+          }
+        }
+      },
+      include: {
+        _count: {
+          select: {
+            participants: true,
+          }
+        },
+        owner: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
+        participants: {
+          select: {
+            userId: true,
+            poolId: true,
+            user: {
+              select: {
+                name: true,
+                email: true,
+                avatarUrl: true,
+              }
+            }
+          },
+          take: 4,
+        }
+      }
+    })
+  }
+
   async findByCode(code: string, userId: string): Promise<PoolDTO | null> {
     return this.repository.findUnique({
       where: { code },

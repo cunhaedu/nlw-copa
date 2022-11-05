@@ -5,12 +5,22 @@ import { CountPoolsService } from '../../../services/CountPoolsService';
 import { CreatePoolService } from '../../../services/CreatePoolService';
 import { CreatePoolInput, JoinPoolInput } from '../../../schemas/pool.schema';
 import { JoinPoolService } from '../../../services/JoinPoolService';
+import { FindUserPoolsService } from '../../../services/FindUserPoolsService';
 
 export class PoolController {
   async count() {
     const countPoolService = container.resolve(CountPoolsService);
 
     return countPoolService.execute();
+  }
+
+  async findUserPools(request: FastifyRequest) {
+    const userId = request.user.sub;
+    const findUserPoolService = container.resolve(FindUserPoolsService);
+
+    const { pools } = await findUserPoolService.execute(userId);
+
+    return pools;
   }
 
   async create(

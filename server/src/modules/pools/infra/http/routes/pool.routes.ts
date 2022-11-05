@@ -32,6 +32,14 @@ export async function poolRoutes(server: FastifyInstance) {
   );
 
   server.get(
+    "/",
+    {
+      onRequest: [authenticate],
+    },
+    poolController.findUserPools,
+  );
+
+  server.get(
     "/count",
     poolController.count,
   );

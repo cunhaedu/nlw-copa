@@ -9,6 +9,7 @@ export type CreatePool = {
 export interface PoolRepository {
   findByCode(code: string, userId: string): Promise<PoolDTO | null>;
   updateOwner(poolId: string, ownerId: string): Promise<void>;
+  findUserPools(userId: string): Promise<PoolDTO[]>;
   create(data: CreatePool): Promise<PoolDTO>;
   count(): Promise<number>;
 }
