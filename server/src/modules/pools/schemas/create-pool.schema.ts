@@ -18,4 +18,6 @@ export type CreatePoolInput = z.infer<typeof createPoolSchema>;
 export const { schemas: poolSchemas, $ref } = buildJsonSchemas({
   createPoolResponseSchema,
   createPoolSchema,
+}, {
+  $id: 'create-pool-schema',
 });
