@@ -3,9 +3,10 @@ import { container } from 'tsyringe';
 
 import { CountPoolsService } from '../../../services/CountPoolsService';
 import { CreatePoolService } from '../../../services/CreatePoolService';
-import { CreatePoolInput, JoinPoolInput } from '../../../schemas/pool.schema';
+import { CreatePoolInput, FindPoolInput, JoinPoolInput } from '../../../schemas/pool.schema';
 import { JoinPoolService } from '../../../services/JoinPoolService';
 import { FindUserPoolsService } from '../../../services/FindUserPoolsService';
+import { FindPoolService } from '../../../services/FindPoolService';
 
 export class PoolController {
   async count() {
@@ -18,9 +19,18 @@ export class PoolController {
     const userId = request.user.sub;
     const findUserPoolService = container.resolve(FindUserPoolsService);
 
-    const { pools } = await findUserPoolService.execute(userId);
+    const pools = await findUserPoolService.execute(userId);
 
     return pools;
+  }
+
+  async findPool(request: FastifyRequest<{ Params: FindPoolInput }>) {
+    const { id } = request.params;
+    const findPoolService = container.resolve(FindPoolService);
+
+    const pool = await findPoolService.execute(id);
+
+    return pool;
   }
 
   async create(

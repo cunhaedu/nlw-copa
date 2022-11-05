@@ -21,7 +21,7 @@ export async function poolRoutes(server: FastifyInstance) {
   );
 
   server.post(
-    "/:id/join",
+    "/join",
     {
       onRequest: [authenticate],
       schema: {
@@ -32,15 +32,26 @@ export async function poolRoutes(server: FastifyInstance) {
   );
 
   server.get(
+    "/count",
+    poolController.count,
+  );
+
+  server.get(
+    "/:id",
+    {
+      onRequest: [authenticate],
+      schema: {
+        params: $ref("findPoolSchema"),
+      },
+    },
+    poolController.findPool,
+  );
+
+  server.get(
     "/",
     {
       onRequest: [authenticate],
     },
     poolController.findUserPools,
-  );
-
-  server.get(
-    "/count",
-    poolController.count,
   );
 }

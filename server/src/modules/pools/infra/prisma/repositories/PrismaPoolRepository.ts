@@ -45,13 +45,42 @@ export class PrismaPoolRepository implements PoolRepository {
             poolId: true,
             user: {
               select: {
-                name: true,
-                email: true,
                 avatarUrl: true,
               }
             }
           },
           take: 4,
+        }
+      }
+    })
+  }
+
+  async findById(id: string): Promise<PoolDTO | null> {
+    return this.repository.findUnique({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            participants: true,
+          }
+        },
+        owner: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
+        participants: {
+          select: {
+            userId: true,
+            poolId: true,
+            user: {
+              select: {
+                name: true,
+                avatarUrl: true,
+              }
+            }
+          }
         }
       }
     })

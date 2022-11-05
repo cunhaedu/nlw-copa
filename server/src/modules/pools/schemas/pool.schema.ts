@@ -25,10 +25,21 @@ const joinPoolSchema = z.object({
 
 export type JoinPoolInput = z.infer<typeof joinPoolSchema>;
 
+const findPoolSchema = z.object({
+  id: z
+    .string({
+      required_error: "title is required",
+      invalid_type_error: "title must be a string",
+    }).min(1, { message: "title is required" })
+});
+
+export type FindPoolInput = z.infer<typeof findPoolSchema>;
+
 export const { schemas: poolSchemas, $ref } = buildJsonSchemas({
   createPoolResponseSchema,
   createPoolSchema,
   joinPoolSchema,
+  findPoolSchema,
 }, {
   $id: 'pool-schema',
 });
