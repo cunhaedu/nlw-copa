@@ -10,7 +10,7 @@ import '../container';
 import { guessRoutes } from '../../modules/guesses/infra/http/routes/guess.routes';
 import { poolRoutes } from '../../modules/pools/infra/http/routes/pool.routes';
 import { userRoutes } from '../../modules/users/infra/http/routes/user.routes';
-import { poolSchemas } from '../../modules/pools/schemas/create-pool.schema';
+import { poolSchemas } from '../../modules/pools/schemas/pool.schema';
 import { userSchemas } from '../../modules/users/schemas/create-user.schema';
 
 const EnvSchema: fastifyEnvOpt = {

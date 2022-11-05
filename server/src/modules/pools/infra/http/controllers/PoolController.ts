@@ -3,7 +3,8 @@ import { container } from 'tsyringe';
 
 import { CountPoolsService } from '../../../services/CountPoolsService';
 import { CreatePoolService } from '../../../services/CreatePoolService';
-import { CreatePoolInput } from '../../../schemas/create-pool.schema';
+import { CreatePoolInput, JoinPoolInput } from '../../../schemas/pool.schema';
+import { JoinPoolService } from '../../../services/JoinPoolService';
 
 export class PoolController {
   async count() {
@@ -18,10 +19,36 @@ export class PoolController {
   ) {
     const { title } = request.body;
 
+    let ownerId: string | null;
+
+    try {
+      await request.jwtVerify();
+      ownerId = request.user.sub;
+    } catch {
+      ownerId = null;
+    }
+
     const createPoolService = container.resolve(CreatePoolService);
 
-    const pool = await createPoolService.execute({ title });
+    const pool = await createPoolService.execute({ title, ownerId });
 
     return reply.status(201).send({ code: pool.code })
+  }
+
+  async join(
+    request: FastifyRequest<{ Body: JoinPoolInput }>,
+    reply: FastifyReply
+  ) {
+    const { code } = request.body;
+    const userId = request.user.sub;
+
+    const joinPoolService = container.resolve(JoinPoolService);
+
+    try {
+      await joinPoolService.execute({ code, userId });
+      return reply.status(201).send();
+    } catch (error: any) {
+      return reply.status(400).send(error.message);
+    }
   }
 }

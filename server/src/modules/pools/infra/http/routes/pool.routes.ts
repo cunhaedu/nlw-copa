@@ -1,7 +1,8 @@
 import { FastifyInstance } from "fastify";
 
 import { PoolController } from "../controllers/PoolController";
-import { $ref } from "../../../schemas/create-pool.schema";
+import { $ref } from "../../../schemas/pool.schema";
+import { authenticate } from '../../../../../plugins/authenticate';
 
 export async function poolRoutes(server: FastifyInstance) {
   const poolController = new PoolController();
@@ -17,6 +18,17 @@ export async function poolRoutes(server: FastifyInstance) {
       },
     },
     poolController.create,
+  );
+
+  server.post(
+    "/:id/join",
+    {
+      onRequest: [authenticate],
+      schema: {
+        body: $ref("joinPoolSchema"),
+      },
+    },
+    poolController.join,
   );
 
   server.get(
