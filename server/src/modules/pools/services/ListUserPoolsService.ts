@@ -4,7 +4,7 @@ import { PoolDTO } from '../dtos/PoolDTO';
 import { PoolRepository } from '../repositories/PoolRepository';
 
 @injectable()
-export class FindUserPoolsService {
+export class ListUserPoolsService {
   constructor(
     @inject('PoolRepository')
     private poolRepository: PoolRepository

@@ -7,6 +7,7 @@ async function main() {
     data: {
       name: 'John Doe',
       email: 'john.doe@gmail.com',
+      googleId: 'googleId',
       avatarUrl: 'https://github.com/cunhaedu.png',
     }
   });

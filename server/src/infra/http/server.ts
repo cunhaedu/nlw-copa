@@ -1,17 +1,19 @@
-import cors from '@fastify/cors';
-import Fastify from 'fastify';
-import jwt from '@fastify/jwt';
 import env, { fastifyEnvOpt } from '@fastify/env';
+import cors from '@fastify/cors';
+import jwt from '@fastify/jwt';
+import Fastify from 'fastify';
 
 import 'reflect-metadata';
 
 import '../container';
 
 import { guessRoutes } from '../../modules/guesses/infra/http/routes/guess.routes';
+import { gameRoutes } from '../../modules/games/infra/http/routes/game.routes';
 import { poolRoutes } from '../../modules/pools/infra/http/routes/pool.routes';
 import { userRoutes } from '../../modules/users/infra/http/routes/user.routes';
-import { poolSchemas } from '../../modules/pools/schemas/pool.schema';
 import { userSchemas } from '../../modules/users/schemas/create-user.schema';
+import { poolSchemas } from '../../modules/pools/schemas/pool.schema';
+import { gameSchemas } from '../../modules/games/schemas/game.schema';
 
 const EnvSchema: fastifyEnvOpt = {
   confKey: 'config',
@@ -40,12 +42,13 @@ async function bootstrap() {
 
   await fastify.register(env, EnvSchema);
 
-  for (const schema of [...poolSchemas, ...userSchemas]) {
+  for (const schema of [...poolSchemas, ...userSchemas, ...gameSchemas]) {
     fastify.addSchema(schema);
   }
 
-  fastify.register(poolRoutes, { prefix: "pools" });
   fastify.register(guessRoutes, { prefix: "guesses" });
+  fastify.register(gameRoutes, { prefix: "games" });
+  fastify.register(poolRoutes, { prefix: "pools" });
   fastify.register(userRoutes, { prefix: "users" });
 
   await fastify.register(jwt, {

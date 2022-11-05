@@ -5,7 +5,7 @@ import { CountPoolsService } from '../../../services/CountPoolsService';
 import { CreatePoolService } from '../../../services/CreatePoolService';
 import { CreatePoolInput, FindPoolInput, JoinPoolInput } from '../../../schemas/pool.schema';
 import { JoinPoolService } from '../../../services/JoinPoolService';
-import { FindUserPoolsService } from '../../../services/FindUserPoolsService';
+import { ListUserPoolsService } from '../../../services/ListUserPoolsService';
 import { FindPoolService } from '../../../services/FindPoolService';
 
 export class PoolController {
@@ -17,7 +17,7 @@ export class PoolController {
 
   async findUserPools(request: FastifyRequest) {
     const userId = request.user.sub;
-    const findUserPoolService = container.resolve(FindUserPoolsService);
+    const findUserPoolService = container.resolve(ListUserPoolsService);
 
     const pools = await findUserPoolService.execute(userId);
 
