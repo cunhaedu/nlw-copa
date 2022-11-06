@@ -41,6 +41,7 @@ export class PrismaPoolRepository implements PoolRepository {
         },
         participants: {
           select: {
+            id: true,
             userId: true,
             poolId: true,
             user: {
@@ -72,6 +73,7 @@ export class PrismaPoolRepository implements PoolRepository {
         },
         participants: {
           select: {
+            id: true,
             userId: true,
             poolId: true,
             user: {
