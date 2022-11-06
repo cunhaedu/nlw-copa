@@ -14,8 +14,6 @@ interface Props {
 }
 
 export function Participants({participants, count }: Props) {
-  console.log('PARTICIPANTS ==> ', participants);
-
   return (
     <HStack>
       {
