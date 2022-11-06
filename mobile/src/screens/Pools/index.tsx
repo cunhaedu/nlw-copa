@@ -20,8 +20,6 @@ export function Pools() {
   async function fetchPools() {
     try {
       const response = await api.get<{ pools: PoolCardPros[] }>('pools');
-      console.log(response.data);
-
       setPools(response.data.pools);
     } catch (error) {
       toast.show({
