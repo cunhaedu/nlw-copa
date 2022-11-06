@@ -1,6 +1,7 @@
 import { injectable } from 'tsyringe';
 
 import { CreateParticipant, ParticipantRepository } from '../../../repositories/ParticipantRepository';
+import { ParticipantDTO } from '../../../dtos/ParticipantDTO';
 import { prisma } from '../../../../../infra/prisma/client';
 
 @injectable()
@@ -18,5 +19,19 @@ export class PrismaParticipantRepository implements ParticipantRepository {
         poolId,
       }
     });
+  }
+
+  async findByPoolAndUserId(
+    poolId: string,
+    userId: string
+  ): Promise<ParticipantDTO | null> {
+    return this.repository.findUnique({
+      where: {
+        poolId_userId: {
+          poolId,
+          userId,
+        }
+      }
+    })
   }
 }

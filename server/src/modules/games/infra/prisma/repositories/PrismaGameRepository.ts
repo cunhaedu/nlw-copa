@@ -29,4 +29,15 @@ export class PrismaGameRepository implements GameRepository {
       }
     });
   }
+
+  async findById(id: string): Promise<GameDTO | null> {
+    return this.repository.findUnique({
+      where: {
+        id
+      },
+      include: {
+        guesses: true,
+      }
+    })
+  }
 }

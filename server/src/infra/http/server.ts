@@ -12,6 +12,7 @@ import { gameRoutes } from '../../modules/games/infra/http/routes/game.routes';
 import { poolRoutes } from '../../modules/pools/infra/http/routes/pool.routes';
 import { userRoutes } from '../../modules/users/infra/http/routes/user.routes';
 import { userSchemas } from '../../modules/users/schemas/create-user.schema';
+import { guessSchemas } from '../../modules/guesses/schemas/guess.schema';
 import { poolSchemas } from '../../modules/pools/schemas/pool.schema';
 import { gameSchemas } from '../../modules/games/schemas/game.schema';
 
@@ -42,7 +43,14 @@ async function bootstrap() {
 
   await fastify.register(env, EnvSchema);
 
-  for (const schema of [...poolSchemas, ...userSchemas, ...gameSchemas]) {
+  for (
+    const schema of [
+      ...poolSchemas,
+      ...userSchemas,
+      ...gameSchemas,
+      ...guessSchemas
+    ]
+  ) {
     fastify.addSchema(schema);
   }
 
