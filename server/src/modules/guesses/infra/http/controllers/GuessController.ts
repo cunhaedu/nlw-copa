@@ -39,7 +39,7 @@ export class GuessController {
 
       return reply.status(201).send()
     } catch (error: any) {
-      return reply.status(400).send({ error: error.message })
+      return reply.status(400).send({ message: error.message })
     }
   }
 }

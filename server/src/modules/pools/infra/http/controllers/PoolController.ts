@@ -68,7 +68,7 @@ export class PoolController {
       await joinPoolService.execute({ code, userId });
       return reply.status(201).send();
     } catch (error: any) {
-      return reply.status(400).send(error.message);
+      return reply.status(400).send({ message: error.message });
     }
   }
 }
