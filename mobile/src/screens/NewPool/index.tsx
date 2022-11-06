@@ -1,13 +1,51 @@
-import { Heading, Text, VStack } from 'native-base';
-import React from 'react';
+import { Heading, Text, useToast, VStack } from 'native-base';
+import React, { useState } from 'react';
 
 import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';
 import { Input } from '../../components/Input';
 
 import Logo from '../../assets/logo.svg';
+import { api } from '../../services/api';
 
 export function NewPool() {
+  const [title, setTitle] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const toast = useToast();
+
+  async function handleCreatePool() {
+    if (!title.trim().length) {
+      return toast.show({
+        title: 'Informe um nome para o seu bolão',
+        placement: 'top',
+        bgColor: 'red.500',
+      });
+    }
+
+    try {
+      setIsLoading(true);
+
+      await api.post('pools', { title });
+
+      toast.show({
+        title: 'Bolão cadastrado com sucesso!',
+        placement: 'top',
+        bgColor: 'green.500',
+      });
+
+      setTitle('');
+    } catch (error) {
+      toast.show({
+        title: 'Houve um erro ao criar o bolão, tente novamente mais tarde!',
+        placement: 'top',
+        bgColor: 'red.500',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <VStack flex={1} bgColor="gray.900">
       <Header title="Criar novo bolão" />
@@ -22,9 +60,15 @@ export function NewPool() {
         <Input
           mb={2}
           placeholder="Qual nome do seu bolão?"
+          onChangeText={setTitle}
+          value={title}
         />
 
-        <Button title="CRIAR MEU BOLÃO" />
+        <Button
+          title="CRIAR MEU BOLÃO"
+          onPress={handleCreatePool}
+          isLoading={isLoading}
+        />
 
         <Text color="gray.200" fontSize="sm" textAlign="center" px={10} mt={4}>
           Após criar seu bolão, você receberá um código único que poderá usar
